@@ -26,4 +26,9 @@ apiRouter.get('/menu', (req, res) => {
       
 })
 
+//Get the profile of the current user (via session info)
+apiRouter.get('/user', (req, res) => {
+  
+})
+
 module.exports = apiRouter;
