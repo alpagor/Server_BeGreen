@@ -45,7 +45,7 @@ const recipe = [
       "ovoVegetarian",
       "lactoVegetarian",
     ],
-    type: ["lunch"],
+    type: "lunch",
   },
   {
     name: "Protein Breakfast Bars",
@@ -84,7 +84,7 @@ const recipe = [
       "ovoVegetarian",
       "lactoVegetarian",
     ],
-    type: ["breakfast"],
+    type: "breakfast",
   },
   {
     name: "Teriyaki Tofu Stir Fry",
@@ -135,7 +135,7 @@ const recipe = [
       "lactoVegetarian",
       "dairyFree",
     ],
-    type: ["lunch", "dinner"],
+    type: "dinner",
   },
   {
     name: "Chocolate Protein Shake",
@@ -169,7 +169,7 @@ const recipe = [
       "ovoVegetarian",
       "lactoVegetarian",
     ],
-    type: ["breakfast"],
+    type: "breakfast",
   },
   {
     name: "Mongolian Seitan",
@@ -208,7 +208,7 @@ const recipe = [
       "ovoVegetarian",
       "lactoVegetarian",
     ],
-    type: ["lunch", "dinner"],
+    type: "dinner",
   },
   {
     name: "Vegan Samosa Pie",
@@ -249,7 +249,7 @@ const recipe = [
       "ovoVegetarian",
       "lactoVegetarian",
     ],
-    type: ["lunch", "dinner"],
+    type: "lunch",
   },
 ];
 

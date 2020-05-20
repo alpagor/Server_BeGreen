@@ -31,4 +31,24 @@ apiRouter.get('/user', (req, res) => {
   
 })
 
+//Edit the profile of the current user (via session info)
+apiRouter.put('/user', (req, res) => {
+
+})
+
+//Update current user plan
+apiRouter.patch('/user/premium', (req,res) =>{
+
+})
+
+//Save C.C. details
+apiRouter.put('/user/cc', (req,res) =>{
+
+})
+
+//Save User personal details
+apiRouter.patch('/user/det', (req,res) =>{
+
+})
+
 module.exports = apiRouter;

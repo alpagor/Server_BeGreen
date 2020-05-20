@@ -49,7 +49,7 @@ const recipeSchema = Schema({
     ],
   },
   type: {
-    type: [String],
+    type: String,
     required: true,
     enum: ["breakfast", "lunch", "dinner"],
   },
