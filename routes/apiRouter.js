@@ -5,6 +5,7 @@ const createError = require("http-errors");
 
 const Recipe = require("../models/recipe");
 const Menu = require("../models/menu");
+const User = require("../models/user");
 
 //Send recipe list by type
 apiRouter.get("/recipe", (req, res) => {
@@ -45,10 +46,17 @@ apiRouter.get("/recipe/:recipeId", (req, res) => {
 apiRouter.post("/menu", (req, res) => {
   const { name, recipes } = req.body;
 
+  const currentUserID = req.session.currentUser;
+
   Menu.create({ name, recipes })
 
     .then((menu) => {
-      res.status(201).json(menu);
+      //push inside menus array the created menu
+      User.findByIdAndUpdate(currentUserID, { $push: { menus: menu } }).then(
+        () => {
+          res.status(201).json(menu);
+        }
+      );
     })
     .catch((err) => {
       res.status(500).json(err);
@@ -60,9 +68,15 @@ apiRouter.get("/menu", (req, res) => {
   const currentUserID = req.session.currentUser;
   const userNow = User.findById(currentUserID);
 
+  // populate the User menu array with the menus inside the Menu model and
+  // then populate the recipes array inside Menu with the recipes in Recipe model
   userNow
-    .populate("menus")
-    .populate("recipes")
+    .populate({
+      path: "menus",
+      model: "Menu",
+      populate: { path: "recipes", model: "Recipe" },
+    })
+
     .then((allMenus) => {
       res.status(200).json(allMenus);
     })
@@ -87,7 +101,7 @@ apiRouter.get("/menu/:id", (req, res) => {
 
 //Get the profile of the current user (via session info)
 apiRouter.get("/user", (req, res) => {
-  const currentUser = req.session._id;
+  const currentUser = req.session.currentUser._id;
 
   User.findById(currentUser)
     .then((userDetails) => {
@@ -134,7 +148,7 @@ apiRouter.patch("/user/premium", (req, res) => {
   User.findById(currentUser)
     .then((user) => {
       premiumState = !user.premium;
-      const { premium } = req.body;
+
       return User.update(
         { _id: currentUser },
         { premium: premiumState },
