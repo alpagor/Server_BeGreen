@@ -57,7 +57,7 @@ BeGreen is an app created to help you with your choice to eliminate meat from yo
 |       `/`       |  SplashPage   |    `<Route/>`     | Home page                                                    |
 |    `/signup`    |  SignupPage   | `<PublicRoute/>`  | Signup form, link to login,navigate to homepage after signup |
 |    `/login`     |   LoginPage   | `<PublicRoute/>`  | Login form, link to signup, navigate to homepage after login |
-|  `/generator`   | GeneratorPage | `<PrivateRoute/>` | Shows recipe generator page                                  |
+|  `/generator`   | GeneratorPage | `<PrivateRoute/>` | Shows menu generator page                                    |
 |     `/menu`     |   MenuPage    | `<PrivateRoute/>` | Shows MenuPage                                               |
 |     `/chat`     |   ChatPage    | `<PremiumRoute/>` | Show chat box if premium user else show become premium component |
 |   `/userzone`   | UserzonePage  | `<PrivateRoute/>` | Show UserzonePage                                            |
@@ -83,8 +83,7 @@ BeGreen is an app created to help you with your choice to eliminate meat from yo
 ### Atom page components
 
 - NavBar
-- Generator
-- DailyList
+- RecipeList
 - RecipeDetails
 - MenuList
 - MenuDetails
@@ -165,7 +164,7 @@ Menu Model
 | POST        | `/auth/signup`      | {username, img, diet, password} | 201            | 404          | Checks if fields not empty (400) and user not exists (409), then create user with encrypted password, and store user in session |
 | POST        | `/auth/login`       | {username, password}            | 200            | 401          | Checks if fields not empty (400), if user exists (else 404), and if password matches (else 404), then stores user in session |
 | POST        | `/auth/logout`      | (empty)                         | 204            | 400          | Logs out the user and destroy the session                    |
-| GET         | `/api/recipe/`      |                                 | 204            | 400          | Send random recipe details                                   |
+| GET         | `/api/recipe/`      |                                 | 204            | 400          | Show recipes list                                            |
 | GET         | `/api/recipe/:id`   |                                 | 204            | 400          | Returns specific recipe by Id                                |
 | POST        | `/api/menu`         | {menu}                          | 201            | 400          | Create Menu. Including 3 recipes on the menu                 |
 | GET         | `/api/menu`         |                                 | 200            | 400          | Show all created menus for the current user                  |

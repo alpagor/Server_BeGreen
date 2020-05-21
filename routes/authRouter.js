@@ -8,26 +8,33 @@ const saltRounds = 10;
 
 const User = require("../models/user");
 
-
 // HELPER FUNCTIONS
-const { isLoggedIn, isNotLoggedIn, validationLogin } = require("../helpers/middlewares");
+const {
+  isLoggedIn,
+  isNotLoggedIn,
+  validationLogin,
+} = require("../helpers/middlewares");
 
 // POST   '/auth/signup'
-authRouter.post('/signup', isNotLoggedIn, validationLogin, (req, res, next) => {
-  const { username, password } = req.body;
+authRouter.post("/signup", isNotLoggedIn, validationLogin, (req, res, next) => {
+  const { username, password, picture } = req.body;
 
   User.findOne({ username })
     .then((user) => {
       //  - check if the `username` exists, if it does send a response with an error
       if (user) {
         return next(createError(400));
-      }
-      else {  //  - if `username` is unique then:
+      } else {
+        //  - if `username` is unique then:
         //     - encrypt the password using bcrypt
         const salt = bcrypt.genSaltSync(saltRounds);
         const hashPass = bcrypt.hashSync(password, salt);
         //     - create the new user in DB using the `username` and the encrypted password
-        User.create({ username, password: hashPass })
+        User.create({
+          username,
+          password: hashPass,
+          picture,
+        })
           .then((newUser) => {
             //     - save the newly created user in the `session`
             newUser.password = "****";
@@ -36,16 +43,15 @@ authRouter.post('/signup', isNotLoggedIn, validationLogin, (req, res, next) => {
             res
               .status(201) // Created
               .json(newUser);
-
           })
           .catch((err) => next(createError(err)));
       }
-    }).catch((err) => next(createError(err)));
-})
+    })
+    .catch((err) => next(createError(err)));
+});
 
 // POST    '/auth/login'
-authRouter.post('/login', isNotLoggedIn, validationLogin, (req, res, next) => {
-
+authRouter.post("/login", isNotLoggedIn, validationLogin, (req, res, next) => {
   const { username, password } = req.body;
   User.findOne({ username })
     .then((user) => {
@@ -53,8 +59,7 @@ authRouter.post('/login', isNotLoggedIn, validationLogin, (req, res, next) => {
       if (!user) {
         //  - if user doesn't exist - forward the error to the error middleware using `next()`
         return next(createError(404)); // Unathorized
-      }
-      else {
+      } else {
         //  - check if the password is correct
         const passwordCorrect = bcrypt.compareSync(password, user.password);
         if (passwordCorrect) {
@@ -62,17 +67,15 @@ authRouter.post('/login', isNotLoggedIn, validationLogin, (req, res, next) => {
           user.password = "****";
           req.session.currentUser = user;
           //  - send  json response
-          res
-            .status(200)
-            .json(user);
+          res.status(200).json(user);
         }
       }
     })
     .catch((err) => next(createError(err)));
-})
+});
 
 // GET   '/auth/logout'
-authRouter.get('/logout', isLoggedIn, (req, res, next) => {
+authRouter.get("/logout", isLoggedIn, (req, res, next) => {
   //  - check if the user is logged in using helper function (check if session exists)
 
   //  - destroy the session
@@ -84,19 +87,16 @@ authRouter.get('/logout', isLoggedIn, (req, res, next) => {
         .status(204) // No Content
         .send();
     }
-  })
-})
+  });
+});
 
 // GET    '/auth/me'
-authRouter.get('/me', isLoggedIn, (req, res, next) => {
+authRouter.get("/me", isLoggedIn, (req, res, next) => {
   //  - check if the user IS logged in using helper function (check if session exists)
 
   //  - if yes, send the response with user info (available on req.session.currentUser)
   const currentUserSessionData = req.session.currentUser;
-  res
-    .status(200)
-    .json(currentUserSessionData);
-})
-
+  res.status(200).json(currentUserSessionData);
+});
 
 module.exports = authRouter;
