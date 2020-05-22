@@ -8,17 +8,23 @@ const Menu = require("../models/menu");
 const User = require("../models/user");
 
 //Send recipe list by type
+// GET    "/api/recipe"
+// GET    "/api/recipe?type=lunch"
 apiRouter.get("/recipe", (req, res) => {
-  const recipeType = req.body.type;
+  let recipeType;
+  if (req.query.type) {
+    recipeType = req.query.type;
+  }
 
   //if recipe type exists create queryObject is { type: recipeType }
   // else if no type is provided queryObject is {}
 
   const queryObject = {};
 
-  if (recipeType) {
+  if (recipeType && recipeType !== "all") {
     queryObject.type = recipeType;
   }
+  console.log(queryObject);
 
   Recipe.find(queryObject)
     .then((recipes) => {
