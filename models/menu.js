@@ -6,10 +6,7 @@ const menuSchema = Schema({
         type: String, 
         required: true
     },
-    recipes: [{
-        type: Schema.Types.ObjectId,
-        ref:'Recipe'
-    }],
+    recipes: [{ type: Schema.Types.ObjectId, ref:'Recipe' }],
 })
 
 const Menu = mongoose.model('Menu', menuSchema);

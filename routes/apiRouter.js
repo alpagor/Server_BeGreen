@@ -74,7 +74,10 @@ apiRouter.get("/menu", (req, res) => {
     .populate({
       path: "menus",
       model: "Menu",
-      populate: { path: "recipes", model: "Recipe" },
+      populate: {
+        path: "recipes",
+        model: "Recipe",
+      },
     })
 
     .then((allMenus) => {
