@@ -108,6 +108,19 @@ apiRouter.get("/menu/:id", (req, res) => {
     });
 });
 
+//DELETE MENU
+apiRouter.post("/menu/:id/delete", (req, res) => {
+  const { id } = req.params;
+
+  Menu.findByIdAndRemove(id)
+    .then((removedMenu) => {
+      res.status(200).json(removedMenu);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+
 //Get the profile of the current user (via session info)
 apiRouter.get("/user", (req, res) => {
   const currentUser = req.session.currentUser._id;
