@@ -18,7 +18,7 @@ const {
 // POST   '/auth/signup'
 authRouter.post("/signup", isNotLoggedIn, validationLogin, (req, res, next) => {
   const { username, password, picture, email, fullName } = req.body;
-
+    console.log("que falta?>>>>", req.body)
   User.findOne({ username })
     .then((user) => {
       //  - check if the `username` exists, if it does send a response with an error
