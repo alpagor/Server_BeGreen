@@ -17,7 +17,7 @@ const {
 
 // POST   '/auth/signup'
 authRouter.post("/signup", isNotLoggedIn, validationLogin, (req, res, next) => {
-  const { username, password, picture } = req.body;
+  const { username, password, picture, email, fullName } = req.body;
 
   User.findOne({ username })
     .then((user) => {
@@ -34,6 +34,8 @@ authRouter.post("/signup", isNotLoggedIn, validationLogin, (req, res, next) => {
           username,
           password: hashPass,
           picture,
+          email,
+          fullName,
         })
           .then((newUser) => {
             //     - save the newly created user in the `session`

@@ -136,23 +136,11 @@ apiRouter.get("/user", (req, res) => {
 
 //Edit the profile of the current user (via session info)
 apiRouter.put("/user", (req, res) => {
-  const {
-    picture,
-    weight,
-    height,
-    lifestyle,
-    alergies,
-    gender,
-    age,
-  } = req.body;
+  const { fullName, email } = req.body;
 
   const currentUser = req.session.currentUser._id;
 
-  User.findByIdAndUpdate(
-    currentUser,
-    { picture, weight, height, lifestyle, alergies, gender, age },
-    { new: true }
-  )
+  User.findByIdAndUpdate(currentUser, { fullName, email }, { new: true })
     .then((updatedUser) => {
       res.status(200).json(updatedUser);
     })
