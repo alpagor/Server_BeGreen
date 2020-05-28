@@ -149,11 +149,9 @@ apiRouter.put("/user", (req, res) => {
 });
 
 apiRouter.post("/picture", parser.single("picture"), (req, res) => {
-  console.log("sale la foto?>>>>>", req.file);
 
   const imgPath = req.file.path;
 
-  console.log("es img path>>>>>", imgPath);
   res.status(201).json(imgPath);
 });
 
