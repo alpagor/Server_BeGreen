@@ -1,12 +1,10 @@
 const express = require("express");
 const authRouter = express.Router();
-
 const createError = require("http-errors");
-
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-
 const User = require("../models/user");
+const parser = require("./../config/cloudinary");
 
 // HELPER FUNCTIONS
 const {
@@ -16,9 +14,9 @@ const {
 } = require("../helpers/middlewares");
 
 // POST   '/auth/signup'
-authRouter.post("/signup", isNotLoggedIn, validationLogin, (req, res, next) => {
+authRouter.post("/signup", isNotLoggedIn, validationLogin,  (req, res, next) => {
   const { username, password, picture, email, fullName } = req.body;
-    console.log("que falta?>>>>", req.body)
+  
   User.findOne({ username })
     .then((user) => {
       //  - check if the `username` exists, if it does send a response with an error
@@ -51,6 +49,7 @@ authRouter.post("/signup", isNotLoggedIn, validationLogin, (req, res, next) => {
     })
     .catch((err) => next(createError(err)));
 });
+
 
 // POST    '/auth/login'
 authRouter.post("/login", isNotLoggedIn, validationLogin, (req, res, next) => {

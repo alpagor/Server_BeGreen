@@ -1,8 +1,7 @@
 const express = require("express");
 const apiRouter = express.Router();
-
 const createError = require("http-errors");
-
+const parser = require("./../config/cloudinary");
 const Recipe = require("../models/recipe");
 const Menu = require("../models/menu");
 const User = require("../models/user");
@@ -136,75 +135,84 @@ apiRouter.get("/user", (req, res) => {
 
 //Edit the profile of the current user (via session info)
 apiRouter.put("/user", (req, res) => {
-  const { fullName, email } = req.body;
+  const { fullName, email, picture } = req.body;
 
   const currentUser = req.session.currentUser._id;
 
-  User.findByIdAndUpdate(currentUser, { fullName, email }, { new: true })
+  User.findByIdAndUpdate(currentUser, { fullName, email, picture }, { new: true })
     .then((updatedUser) => {
       res.status(200).json(updatedUser);
     })
     .catch((err) => {
       res.status(500).json(err);
     });
+});
+
+apiRouter.post("/picture", parser.single("picture"), (req, res) => {
+  console.log("sale la foto?>>>>>", req.file);
+
+  const imgPath = req.file.path;
+
+  console.log("es img path>>>>>", imgPath);
+  res.status(201).json(imgPath);
 });
 
 //Update current user plan
-apiRouter.patch("/user/premium", (req, res) => {
-  const currentUser = req.session.currentUser._id;
+// apiRouter.patch("/user/premium", (req, res) => {
+//   const currentUser = req.session.currentUser._id;
 
-  let premiumState;
+//   let premiumState;
 
-  User.findById(currentUser)
-    .then((user) => {
-      premiumState = !user.premium;
+//   User.findById(currentUser)
+//     .then((user) => {
+//       premiumState = !user.premium;
 
-      return User.update(
-        { _id: currentUser },
-        { premium: premiumState },
-        { new: true }
-      );
-    })
-    .then((updatedUser) => {
-      res.status(200).json(updatedUser);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
-});
+//       return User.update(
+//         { _id: currentUser },
+//         { premium: premiumState },
+//         { new: true }
+//       );
+//     })
+//     .then((updatedUser) => {
+//       res.status(200).json(updatedUser);
+//     })
+//     .catch((err) => {
+//       res.status(500).json(err);
+//     });
+// });
 
 //Save C.C. details
-apiRouter.put("/user/cc", (req, res) => {
-  const currentUser = req.session.currentUser;
+// apiRouter.put("/user/cc", (req, res) => {
+//   const currentUser = req.session.currentUser;
 
-  const { creditCard } = req.body;
+//   const { creditCard } = req.body;
 
-  User.findByIdAndUpdate(currentUser, { creditCard }, { new: true })
-    .then((updateUser) => {
-      res.status(200).json(updateUser);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
-});
+//   User.findByIdAndUpdate(currentUser, { creditCard }, { new: true })
+//     .then((updateUser) => {
+//       res.status(200).json(updateUser);
+//     })
+//     .catch((err) => {
+//       res.status(500).json(err);
+//     });
+// });
 
 //Save User personal details
-apiRouter.patch("/user/det", (req, res) => {
-  const currentUser = req.session.currentUser;
+// apiRouter.patch("/user/det", (req, res) => {
+//   const currentUser = req.session.currentUser;
 
-  const { weight, height, lifestyle, alergies, gender, age } = req.body;
+//   const { weight, height, lifestyle, alergies, gender, age } = req.body;
 
-  User.findByIdAndUpdate(
-    currentUser,
-    { weight, height, lifestyle, alergies, gender, age },
-    { new: true }
-  )
-    .then((updateUser) => {
-      res.status(200).json(updateUser);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
-});
+//   User.findByIdAndUpdate(
+//     currentUser,
+//     { weight, height, lifestyle, alergies, gender, age },
+//     { new: true }
+//   )
+//     .then((updateUser) => {
+//       res.status(200).json(updateUser);
+//     })
+//     .catch((err) => {
+//       res.status(500).json(err);
+//     });
+// });
 
 module.exports = apiRouter;
