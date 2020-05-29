@@ -23,7 +23,6 @@ apiRouter.get("/recipe", (req, res) => {
   if (recipeType && recipeType !== "all") {
     queryObject.type = recipeType;
   }
-  console.log(queryObject);
 
   Recipe.find(queryObject)
     .then((recipes) => {
@@ -139,7 +138,11 @@ apiRouter.put("/user", (req, res) => {
 
   const currentUser = req.session.currentUser._id;
 
-  User.findByIdAndUpdate(currentUser, { fullName, email, picture }, { new: true })
+  User.findByIdAndUpdate(
+    currentUser,
+    { fullName, email, picture },
+    { new: true }
+  )
     .then((updatedUser) => {
       res.status(200).json(updatedUser);
     })
@@ -149,7 +152,6 @@ apiRouter.put("/user", (req, res) => {
 });
 
 apiRouter.post("/picture", parser.single("picture"), (req, res) => {
-
   const imgPath = req.file.path;
 
   res.status(201).json(imgPath);
